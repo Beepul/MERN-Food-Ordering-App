@@ -1,26 +1,41 @@
-import { Request, Response } from "express";
-import User from "../models/user";
-import BError from "../utils/BError";
+import { Request, Response } from 'express';
+import User from '../models/user';
+import BError from '../utils/BError';
+import { catchAsyncError } from '../middlewares/catchAsyncError';
 
-const createCurrentUser = async (req:Request, res: Response) => {
-    try {
-        const { auth0Id } = req.body
+const createCurrentUser = catchAsyncError(async (req: Request, res: Response) => {
+	const { auth0Id } = req.body;
 
-        const existingUser = await User.findOne({ auth0Id })
+	const existingUser = await User.findOne({ auth0Id });
 
-        if(existingUser){
-            return res.status(200).send()
-        }
-        
-        const newUser = new User(req.body)
-        await newUser.save();
+	if (existingUser) {
+		return res.status(200).send('Success');
+	}
 
-        res.status(201).json(newUser.toObject())
-    } catch (error:any) {
-        throw new BError(error.message || 'Error creating user', 500)
-    }
-}
+	const newUser = new User(req.body);
+	await newUser.save();
+
+	return res.status(201).json(newUser.toObject());
+});
+
+const updateCurrentUser = catchAsyncError(async (req: Request, res: Response) => {
+	const { name, addressLine1, country, city } = req.body;
+
+	const user = await User.findById(req.userId);
+
+	if (!user) throw new BError('User not found', 404);
+
+	user.name = name;
+	user.addressLine1 = addressLine1;
+	user.city = city;
+	user.country = country;
+
+	await user.save();
+
+	res.send(user);
+});
 
 export default {
-    createCurrentUser,
-}
+	createCurrentUser,
+	updateCurrentUser
+};
