@@ -4,7 +4,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS
 
 const corsOptions: CorsOptions = {
     origin: (origin,callback) => {
-        if(!origin || allowedOrigins.indexOf(origin) !== -1 || !origin){
+        if(!origin || allowedOrigins.indexOf(origin) !== -1 ){
             callback(null, true)
         }else{
             callback(new Error('Not allowed by CORS'),false)
