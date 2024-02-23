@@ -27,7 +27,6 @@ export const jwtParse = async (req: Request,res: Response,next: NextFunction) =>
         return res.sendStatus(401)
     }
 
-    console.log('hello')
 
     const token = authorization.split(' ')[1]
 

@@ -3,6 +3,13 @@ import User from '../models/user';
 import BError from '../utils/BError';
 import { catchAsyncError } from '../middlewares/catchAsyncError';
 
+const getCurrentUser = catchAsyncError(async (req: Request, res: Response) => {
+	const currentUser = await User.findOne({ _id: req.userId })
+	if(!currentUser) throw new BError('User not found', 404 )
+
+	res.json(currentUser)
+})
+
 const createCurrentUser = catchAsyncError(async (req: Request, res: Response) => {
 	const { auth0Id } = req.body;
 
@@ -35,7 +42,10 @@ const updateCurrentUser = catchAsyncError(async (req: Request, res: Response) =>
 	res.send(user);
 });
 
+
+
 export default {
 	createCurrentUser,
-	updateCurrentUser
+	updateCurrentUser,
+	getCurrentUser
 };
