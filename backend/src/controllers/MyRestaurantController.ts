@@ -5,6 +5,14 @@ import BError from "../utils/BError";
 import cloudinary from 'cloudinary'
 import mongoose from "mongoose";
 
+const getMyRestaurant = catchAsyncError(async (req: Request, res: Response) => {
+    const restaurant = await Restaurant.findOne({ user: req.userId })
+
+    if(!restaurant) throw new BError('restaurant not found', 400)
+
+    res.json(restaurant)
+})
+
 const createMyResturant = catchAsyncError(async (req: Request,res: Response) => {
     const existingRestaurant = await Restaurant.findOne({user: req.userId})
 
@@ -34,5 +42,6 @@ const createMyResturant = catchAsyncError(async (req: Request,res: Response) => 
 
 
 export default {
+    getMyRestaurant,
     createMyResturant,
 }
