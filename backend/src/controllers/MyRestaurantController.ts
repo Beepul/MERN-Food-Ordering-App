@@ -58,8 +58,7 @@ const updateMyRestaurant = catchAsyncError(async (req: Request,res: Response) =>
     restaurant.menuItems = req.body.menuItems
     restaurant.lastUpdated = new Date()
 
-    if(req.files){
-        console.log(req.files)
+    if(req.file){
         const imageUrl = await uploadImage(req.file as Express.Multer.File)
         restaurant.imageUrl = imageUrl
     }
