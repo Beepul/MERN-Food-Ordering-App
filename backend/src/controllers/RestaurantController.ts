@@ -1,6 +1,18 @@
 import { Request, Response } from "express";
 import { catchAsyncError } from "../middlewares/catchAsyncError";
 import Restaurant from "../models/restaurant";
+import BError from "../utils/BError";
+
+
+const getRestaurant = catchAsyncError(async (req:Request, res: Response) => {
+    const restaurantId = req.params.restaurantId;
+
+    const restaurant = await Restaurant.findById(restaurantId)
+
+    if(!restaurant) throw new BError('restaurant not found', 404)
+
+    res.json(restaurant)
+})
 
 const searchRestaurants = catchAsyncError(async (req:Request, res: Response) => {
     const city = req.params.city 
@@ -73,4 +85,5 @@ const searchRestaurants = catchAsyncError(async (req:Request, res: Response) => 
 
 export default {
     searchRestaurants,
+    getRestaurant
 }
