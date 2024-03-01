@@ -9,6 +9,14 @@ const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string)
 const FRONTEND_URL = process.env.FRONTEND_URL as string 
 const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string
 
+
+const getMyOrder = catchAsyncError(async (req:Request, res: Response) => {
+    const orders = await Order.find({user: req.userId}).populate('restaurant').populate('user')
+
+    res.json(orders)
+})
+
+
 type CheckoutSessionRequest = {
     cartItems: {
         menuItemId: string;
@@ -143,5 +151,6 @@ const createSession = async (
 
 export default {
     createCheckoutSession,
-    stripeWebhookHandler
+    stripeWebhookHandler,
+    getMyOrder
 }
