@@ -4,6 +4,7 @@ import Restaurant from "../models/restaurant";
 import BError from "../utils/BError";
 import cloudinary from 'cloudinary'
 import mongoose from "mongoose";
+import Order from "../models/order";
 
 const getMyRestaurant = catchAsyncError(async (req: Request, res: Response) => {
     const restaurant = await Restaurant.findOne({ user: req.userId })
@@ -83,8 +84,43 @@ const uploadImage = async (file:Express.Multer.File) => {
 }
 
 
+const getMyRestaurantOrders = catchAsyncError(async (req: Request, res: Response) => {
+    const restaurant = await Restaurant.findOne({user: req.userId})
+
+    if(!restaurant) throw new BError('restaurant not found', 404)
+
+    const orders = await Order.find({restaurant: restaurant._id})
+        .populate('restaurant').populate('user');
+
+    res.json(orders)
+})
+
+
+const updateOrderStatus = catchAsyncError(async (req:Request, res: Response) => {
+    const {orderId} = req.params;
+    const {status} = req.body;
+
+    const order = await Order.findById(orderId)
+
+    if(!order) throw new BError('order not found', 404)
+
+    const restaurant = await Restaurant.findById(order.restaurant)
+
+    if(restaurant?.user?._id.toString() !== req.userId){
+        throw new BError('', 401)
+    }
+
+    order.status = status;
+    await order.save()
+
+    res.status(200).json(order)
+})
+
+
 export default {
     getMyRestaurant,
     createMyResturant,
-    updateMyRestaurant
+    updateMyRestaurant,
+    getMyRestaurantOrders,
+    updateOrderStatus
 }
