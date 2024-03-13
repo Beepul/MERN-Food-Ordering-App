@@ -45,3 +45,24 @@ export const useSearchRestaurants = (searchState: SearchState ,city?: string) =>
         isLoading
     }
 }
+
+
+export const useGetRestaurantLocations = (keyword: string) => {
+    const getRestaurantLocations = async (): Promise<string[]> => {
+        const res = await fetch(`${API_BASE_URL}/api/restaurant/locations/${keyword}`)
+
+        if(!res.ok) throw new Error('Failed to get restaurant')
+
+        return res.json()
+    }
+
+    const {data: locations, isLoading, refetch} = useQuery('getRestaurantLocations',getRestaurantLocations, {
+        enabled: !!keyword
+    })
+
+    return {
+        locations,
+        isLoading,
+        refetch
+    }
+}

@@ -70,8 +70,8 @@ const OrderItemCard = ({order}: Props) => {
             <Separator /> 
             <CardContent className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                    {order.cartItems.map((cartItem) => (
-                        <span>
+                    {order.cartItems.map((cartItem,i) => (
+                        <span key={i}>
                             <Badge className="mr-2" variant={'outline'}>{cartItem.quantity}</Badge>
                             {cartItem.name}
                         </span>
@@ -84,8 +84,8 @@ const OrderItemCard = ({order}: Props) => {
                             <SelectValue placeholder="Status" />
                         </SelectTrigger>
                         <SelectContent position="popper">
-                            {ORDER_STATUS.map((status) => (
-                                <SelectItem value={status.value}>{status.label}</SelectItem>
+                            {ORDER_STATUS.map((status,i) => (
+                                <SelectItem value={status.value} key={i}>{status.label}</SelectItem>
                             ))}
                         </SelectContent>
                     </Select>

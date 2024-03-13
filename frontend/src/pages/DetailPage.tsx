@@ -88,7 +88,7 @@ const DetailPage = () => {
     }
 
     if(isLoading || !restaurant){
-        return 'Loading...'
+        return <div className='text-3xl font-bold min-h-screen flex items-center justify-center'>Loading...</div>
     }
     return(
        <div className="flex flex-col gap-10">

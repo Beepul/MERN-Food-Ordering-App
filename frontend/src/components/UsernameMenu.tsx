@@ -5,11 +5,15 @@ import { Link } from "react-router-dom";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 
-const UsernameMenu = () => {
+type Props = {
+    isHome?: boolean;
+}
+
+const UsernameMenu = ({isHome}:Props) => {
     const {user, logout} = useAuth0()
     return(
        <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center px-3 font-bold hover:text-orange-500 gap-2">
+        <DropdownMenuTrigger className={`flex items-center px-3 font-bold ${isHome ? 'text-white' : 'text-gray-900'} hover:text-orange-500 gap-2 transition-all duration-300`}>
             <CircleUserRound className="text-orange-500"/>
             {  user?.email  }
         </DropdownMenuTrigger>
