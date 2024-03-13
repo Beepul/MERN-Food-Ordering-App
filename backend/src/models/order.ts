@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 const orderSchema = new mongoose.Schema({
     restaurant: {
@@ -29,7 +29,6 @@ const orderSchema = new mongoose.Schema({
     },
     createdAt: { type: Date, default: Date.now }
 })
-
 
 const Order = mongoose.model('Order', orderSchema)
 

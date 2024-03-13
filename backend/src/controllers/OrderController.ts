@@ -11,7 +11,7 @@ const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string
 
 
 const getMyOrder = catchAsyncError(async (req:Request, res: Response) => {
-    const orders = await Order.find({user: req.userId}).populate('restaurant').populate('user')
+    const orders = await Order.find({user: req.userId}).populate('restaurant').populate('user').sort({createdAt: -1})
 
     res.json(orders)
 })

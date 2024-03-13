@@ -90,8 +90,13 @@ const getMyRestaurantOrders = catchAsyncError(async (req: Request, res: Response
     if(!restaurant) throw new BError('restaurant not found', 404)
 
     const orders = await Order.find({restaurant: restaurant._id})
-        .populate('restaurant').populate('user');
+        .populate('restaurant').populate('user').sort({createdAt: -1});
 
+    // console.log({allorders})
+
+    // const orders =  allorders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    
+    // console.log({orders})
     res.json(orders)
 })
 

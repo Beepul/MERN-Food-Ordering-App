@@ -83,7 +83,24 @@ const searchRestaurants = catchAsyncError(async (req:Request, res: Response) => 
 })
 
 
+const getLocations = catchAsyncError(async (req: Request, res: Response) => {
+    const { search } = req.params;
+
+    // Use regular expression for case-insensitive search
+    const regex = new RegExp(search, 'i');
+
+    const locations = await Restaurant.find({
+        $or: [
+            { name: { $regex: regex } }, // Match name containing the search keyword
+            { city: { $regex: regex } }  // Match city containing the search keyword
+        ]
+    }).distinct('city');
+
+    res.json(locations);
+});
+
 export default {
     searchRestaurants,
-    getRestaurant
+    getRestaurant,
+    getLocations
 }
